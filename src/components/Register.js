@@ -2,7 +2,7 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import apiClient from '../services/api';
 
-const Login = (props) => {
+const Register = (props) => {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [toHome, setToHome] = React.useState(false);
@@ -22,31 +22,26 @@ const Login = (props) => {
         setUnknownError(false); 
        // props.setMyToken(false);
    
-        apiClient.post('/api/auth/login', {
+        apiClient.post('/api/auth/Register', {
             email: email,
             password: password
         }).then(response => {
             console.log(response);
             if (response.status === 200) {
-                
-                sessionStorage.setItem('token', response.data.data.token); // set token received from sanctum
-                props.login(); // login
 
                 setToHome(true); // redirect
             }
         }).catch(error => {
-           // error 422
-           if(error.response.data.errors){
-                //alert(error.response.data.errors.email); 
-                setAuthError(true);
-                setErrorMsg(error.response.data.errors.email);
-           }
-           
-           // error 401
-            if(error.response.data.message){
-                //alert(error.response.data.message); 
+            if (error.response && error.response.status === 422) {
                 setAuthError(true);
                 setErrorMsg(error.response.data.message);
+                if (error.response.data.errors.email) {
+                    setEmailError(true);
+                    setEmailErrorMsg(error.response.data.errors.email[0]);
+                    }       
+            } else {
+                setUnknownError(true);
+                console.error(error);
             }
         });
       
@@ -59,7 +54,7 @@ const Login = (props) => {
     return (
         <div className="row">
             <div className="col-4">
-                <img className="img-fluid rounded" src="/img/login.jpg" alt="" />
+                <img className="img-fluid rounded" src="/img/Register.jpg" alt="" />
             </div>
             
             <div className="col-8">
@@ -67,8 +62,8 @@ const Login = (props) => {
             <div className="card"  >
 
                 <div className="card-body">
-                {authError ? <div className="alert alert-danger"><i className="fa fa-exclamation-circle" aria-hidden="true"></i> { errorMsg }</div> : null}
-                <h3>  <i className="fa fa-cog"></i> Login</h3>
+                {authError ? <div className="alert alert-danger"> { errorMsg }</div> : null}
+                <h3>  <i className="fa fa-cog"></i> Register</h3>
                     <p className="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
            
                         
@@ -105,7 +100,7 @@ const Login = (props) => {
                                 />
                             </div>
                         
-                                <button type="submit" className="btn btn-primary">Login</button>
+                                <button type="submit" className="btn btn-primary">Register</button>
                                 &nbsp;  
                                 <button type="button" className="btn btn-warning">Register</button> 
                         </form>
@@ -117,4 +112,4 @@ const Login = (props) => {
     );
 };
 
-export default Login;
+export default Register;

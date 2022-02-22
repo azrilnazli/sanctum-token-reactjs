@@ -13,6 +13,10 @@ import PrivateRoute from './utils/PrivateRoute';
 import PublicRoute from './utils/PublicRoute';
 
 const App = () => {
+  const [profile, setProfile] = React.useState(
+    JSON.parse(localStorage.getItem('userObject'))
+  );
+
   const [loggedIn, setLoggedIn] = React.useState(
     sessionStorage.getItem('loggedIn') === 'true' || false
   );
@@ -30,10 +34,15 @@ const App = () => {
       }
     })
   };
+
+  const authLink = loggedIn 
+  ? <a href="#" onClick={logout} className="nav-link "> <i className="fa fa-share-square" aria-hidden="true"></i> Logout ( {profile.name} ) </a> 
+  : <NavLink to='/login' className="nav-link"><i className="fa fa-user" aria-hidden="true"></i> Login</NavLink>;
+
   return (
     <Router>
       <div className="container mt-1 mb-2 py-3 bg-primary">
-        <Navbar  NavLink={NavLink} logout={logout}/>        
+        <Navbar  NavLink={NavLink} authLink={authLink}/>        
         <div className="container mt-1 mb-2 py-3 bg-primary">
           <Switch>
               <PublicRoute path='/'         exact loggedIn={loggedIn} component={Welcome} />
