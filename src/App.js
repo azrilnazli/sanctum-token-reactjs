@@ -11,6 +11,7 @@ import Navbar from './components/Navbar';
 import apiClient from './services/api';
 import PrivateRoute from './utils/PrivateRoute';
 import PublicRoute from './utils/PublicRoute';
+import Register from './components/Register';
 
 const App = () => {
   const [profile, setProfile] = React.useState(
@@ -29,8 +30,6 @@ const App = () => {
       if (response.status === 200) {
         setLoggedIn(false);
         sessionStorage.setItem('loggedIn', false);
-
-        sessionStorage.removeItem('myToken');
       }
     })
   };
@@ -46,11 +45,16 @@ const App = () => {
         <div className="container mt-1 mb-2 py-3 bg-primary">
           <Switch>
               <PublicRoute path='/'         exact loggedIn={loggedIn} component={Welcome} />
+              <PublicRoute path='/register' exact loggedIn={loggedIn} component={Register} />
+
               <PrivateRoute path='/home'    loggedIn={loggedIn} component={Home} />
               <PrivateRoute path='/movies'  loggedIn={loggedIn} component={Movies} />
+              
+              
               <Route path='/login' render={props => (
                 <Login {...props} login={login}  />
               )} />
+
           </Switch>
         </div>
       </div>  

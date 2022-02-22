@@ -5,14 +5,17 @@ import apiClient from '../services/api';
 const Login = (props) => {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
+
     const [toHome, setToHome] = React.useState(false);
-    //const [myToken, setMytoken] = React.useState(false);
+    const [toRegister, setToRegister] = React.useState(false);
+
     const [authError, setAuthError] = React.useState(false);
     const [unknownError, setUnknownError] = React.useState(false);
 
     const [errorMsg, setErrorMsg] = React.useState(false);
     const [emailError, setEmailError] = React.useState(false);
     const [emailErrorMsg, setEmailErrorMsg] = React.useState(false);
+    const [user, setUser] = React.useState([]);
 
 
 
@@ -29,8 +32,22 @@ const Login = (props) => {
             console.log(response);
             if (response.status === 200) {
                 
-                sessionStorage.setItem('token', response.data.data.token); // set token received from sanctum
+                // set token received from sanctum
+                sessionStorage.setItem('token', response.data.data.token); 
                 props.login(); // login
+
+                // set user profile into session
+               // React.useEffect(() => {
+                    apiClient.get('/api/user')
+                    .then(response => {
+                        setUser(response.data);
+            
+                        // Put the object into storage
+                        localStorage.setItem('userObject', JSON.stringify(response.data));
+                    })
+                    .catch(error => console.error(error));
+                
+                //}, [] ); // Empty array [] means this only run on first render
 
                 setToHome(true); // redirect
             }
@@ -50,12 +67,20 @@ const Login = (props) => {
             }
         });
       
-    }
+    } // handleSubmit()
 
+    const handleClick = () => setToRegister(true);
+
+    // redirects
     if (toHome === true) {
         return <Redirect to='/home' />
     }
     
+    if (toRegister === true) {
+        return <Redirect to='/register' />
+    }
+
+    // return JSX
     return (
         <div className="row">
             <div className="col-4">
@@ -107,7 +132,7 @@ const Login = (props) => {
                         
                                 <button type="submit" className="btn btn-primary">Login</button>
                                 &nbsp;  
-                                <button type="button" className="btn btn-warning">Register</button> 
+                                <button onClick={handleClick} type="button" className="btn btn-warning">Register</button> 
                         </form>
 
                 </div>

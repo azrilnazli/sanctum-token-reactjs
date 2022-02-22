@@ -11,10 +11,6 @@ const Home = (props) => {
         apiClient.get('/api/user')
         .then(response => {
             setUser(response.data);
-            //sessionStorage.setItem("name", response.data.name);
-
-            // Put the object into storage
-            localStorage.setItem('userObject', JSON.stringify(response.data));
         })
         .catch(error => console.error(error));
     
