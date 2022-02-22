@@ -3,9 +3,12 @@ import axios from 'axios';
 // axios create
 const apiClient = axios.create({
 
-    baseURL: 'http://localhost:8000',
-    //baseURL: 'http://api.test',
-    withCredentials: true, // laravel condif/cors.php set to true
+    // token
+    baseURL: 'http://api.test',
+
+    // cookie CSRF
+    //baseURL: 'http://localhost:8000',
+    //withCredentials: true, // disable this if using token
 
 });
 
