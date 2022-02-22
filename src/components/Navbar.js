@@ -20,7 +20,7 @@ const Navbar = (
 
     return ( 
         <nav className="navbar navbar-expand-sm navbar-dark bg-primary p-3">
-        <a className="navbar-brand" href="/"><i className="fa fa-cog fa-spin"></i> React Flix</a>
+        <NavLink as={NavLink} to='/' className="navbar-brand"><i className="fa fa-cog fa-spin"></i> React Flix</NavLink>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <ul className="navbar-nav">
             <li className="nav-item text-light">
